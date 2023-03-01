@@ -2,6 +2,7 @@ package com.example.Book_my_Show_Application.EntryDtos;
 
 
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
 public class UserEntryDto {
