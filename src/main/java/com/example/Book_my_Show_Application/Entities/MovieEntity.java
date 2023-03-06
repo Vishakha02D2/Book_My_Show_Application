@@ -3,12 +3,12 @@ package com.example.Book_my_Show_Application.Entities;
 
 import com.example.Book_my_Show_Application.Enums.Genre;
 import com.example.Book_my_Show_Application.Enums.Language;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +39,8 @@ public class MovieEntity {
     private Genre genre;
 
     //this is parent wrt to shows
-    @OneToMany(mappedBy = "movieEntity",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movieEntity",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<ShowEntity> showEntityList = new ArrayList<>();
-
-
 
 
 }

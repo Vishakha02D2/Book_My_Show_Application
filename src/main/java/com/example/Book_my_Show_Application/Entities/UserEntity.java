@@ -1,8 +1,8 @@
 package com.example.Book_my_Show_Application.Entities;
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
+import lombok.*;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 @RestController
 @RequestMapping("/show")
 public class ShowController {
@@ -20,9 +19,12 @@ public class ShowController {
     @PostMapping("/add")
     public ResponseEntity<String> addShow(@RequestBody ShowEntryDto showEntryDto){
 
-        return null;
+        try {
+            showService.addShow(showEntryDto);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
+        return new ResponseEntity<>("show added successfully", HttpStatus.CREATED);
     }
-
-
 }

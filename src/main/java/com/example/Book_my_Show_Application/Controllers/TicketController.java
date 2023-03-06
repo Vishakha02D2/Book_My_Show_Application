@@ -3,6 +3,8 @@ package com.example.Book_my_Show_Application.Controllers;
 import com.example.Book_my_Show_Application.EntryDtos.TicketEntryDto;
 import com.example.Book_my_Show_Application.Services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,18 +18,14 @@ public class TicketController {
     TicketService ticketService;
 
     @PostMapping("/book")
-    public String bookTicket(@RequestBody TicketEntryDto ticketEntryDto){
+    public ResponseEntity<String> addTicket(@RequestBody TicketEntryDto ticketEntryDto){
 
-
-        try{
-            String result = ticketService.addTicket(ticketEntryDto);
-            return result;
-
+        try {
+            ticketService.addTicket(ticketEntryDto);
         }catch (Exception e){
-
-            return "";
+            return new ResponseEntity<>("Ticket booked successfully", HttpStatus.CREATED);
         }
 
-
+        return new ResponseEntity<>("Ticket could not be booked", HttpStatus.BAD_REQUEST);
     }
 }

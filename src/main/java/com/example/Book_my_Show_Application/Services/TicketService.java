@@ -7,18 +7,21 @@ import com.example.Book_my_Show_Application.Entities.ShowSeatEntity;
 import com.example.Book_my_Show_Application.Entities.TicketEntity;
 import com.example.Book_my_Show_Application.Entities.UserEntity;
 import com.example.Book_my_Show_Application.EntryDtos.TicketEntryDto;
-
 import com.example.Book_my_Show_Application.Repositories.ShowRepository;
 import com.example.Book_my_Show_Application.Repositories.TicketRepository;
 import com.example.Book_my_Show_Application.Repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service
+@Slf4j
 public class TicketService {
 
 
@@ -30,6 +33,9 @@ public class TicketService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    JavaMailSender javaMailSender;
 
     public String addTicket(TicketEntryDto ticketEntryDto) throws Exception{
 
@@ -85,6 +91,8 @@ public class TicketService {
         ticketEntity.setShowEntity(showEntity);
 
         //Save the parent
+        ticketEntity = ticketRepository.save(ticketEntity);
+
 
         List<TicketEntity> ticketEntityList = showEntity.getListOfBookedTickets();
         ticketEntityList.add(ticketEntity);
@@ -98,6 +106,19 @@ public class TicketService {
         userEntity.setBookedTickets(ticketEntityList1);
 
         userRepository.save(userEntity);
+
+
+        String body = "Hi this is to confirm your booking for seat No "+allotedSeats +"for the movie : " + ticketEntity.getMovieName();
+
+
+        MimeMessage mimeMessage=javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage,true);
+        mimeMessageHelper.setFrom("patilvishakha210@gmail.com");
+        mimeMessageHelper.setTo(userEntity.getEmail());
+        mimeMessageHelper.setText(body);
+        mimeMessageHelper.setSubject("Confirming your booked Ticket");
+        log.info("vishakha");
+        javaMailSender.send(mimeMessage);
 
 
         return "Ticket has successfully been added";
