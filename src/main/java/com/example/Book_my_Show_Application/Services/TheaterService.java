@@ -5,12 +5,11 @@ import com.example.Book_my_Show_Application.Entities.TheaterEntity;
 import com.example.Book_my_Show_Application.Entities.TheaterSeatEntity;
 import com.example.Book_my_Show_Application.EntryDtos.TheaterEntryDto;
 import com.example.Book_my_Show_Application.Enums.SeatType;
-
-
 import com.example.Book_my_Show_Application.Repositories.TheaterRepository;
 import com.example.Book_my_Show_Application.Repositories.TheaterSeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,5 +72,11 @@ public class TheaterService {
         //Not saving the child here
         return theaterSeatEntityList;
 
+    }
+    public List<String> getAll(){
+        return theaterRepository.getAllTheaters();
+    }
+    public List<String> shows(@RequestParam String name ){
+        return theaterRepository.shows(name);
     }
 }

@@ -5,13 +5,14 @@ import com.example.Book_my_Show_Application.Convertors.Showconvertors;
 import com.example.Book_my_Show_Application.Entities.*;
 import com.example.Book_my_Show_Application.EntryDtos.ShowEntryDto;
 import com.example.Book_my_Show_Application.Enums.SeatType;
-
 import com.example.Book_my_Show_Application.Repositories.MovieRepository;
 import com.example.Book_my_Show_Application.Repositories.ShowRepository;
 import com.example.Book_my_Show_Application.Repositories.TheaterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,4 +103,30 @@ public class ShowService {
         return  seatEntityList;
 
     }
+
+    public List<String> showsOfMovie(@RequestParam String name){   //giving -> show time and theater for given movie
+        return showRepository.showsOfMovie(name);
+    }
+
+    public List<String> showAfter(LocalTime time){
+        List<ShowEntity> showEntityList = showRepository.findAll();
+        List<String> showEntityList1 = new ArrayList<>();
+
+
+        for(ShowEntity showEntity: showEntityList){
+            if(showEntity.getShowTime().isAfter(time)){
+                MovieEntity movieEntity = movieRepository.findById(showEntity.getMovieEntity().getId()).get();
+                TheaterEntity theaterEntity = theaterRepository.findById(showEntity.getTheaterEntity().getId()).get();
+                showEntityList1.add(movieEntity.getMovieName()+" "+theaterEntity.getName()+" "+theaterEntity.getLocation());
+            }
+        }
+
+
+
+        return showEntityList1;
+
+
+    }
+
+
 }

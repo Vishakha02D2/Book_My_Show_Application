@@ -5,10 +5,11 @@ import com.example.Book_my_Show_Application.Services.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/show")
 public class ShowController {
@@ -26,5 +27,14 @@ public class ShowController {
         }
 
         return new ResponseEntity<>("show added successfully", HttpStatus.CREATED);
+    }
+
+    @GetMapping("showsOfMovie")
+    public List<String> showsOfMovie(@RequestParam String name){
+        return showService.showsOfMovie(name);
+    }
+    @GetMapping("showAfter")
+    public List<String> showAfter(@RequestParam LocalTime time){
+        return showService.showAfter(time);
     }
 }

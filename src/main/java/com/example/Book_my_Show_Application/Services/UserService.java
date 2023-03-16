@@ -8,6 +8,8 @@ import com.example.Book_my_Show_Application.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -25,6 +27,21 @@ public class UserService {
 
     }
 
+    public String deleteUser(String mob){
+        UserEntity userEntity = userRepository.deleteUser(mob);
+        if(userEntity==null) return "User not found";
+        userRepository.delete(userEntity);
+        return "Deleted successfully";
+    }
+    public List<String> getAll() {
+        return userRepository.getAll();
+    }
 
+    public String updateAddress(String mob, String address){
+        UserEntity userEntity = userRepository.findMob(mob);
+        userEntity.setAddress(address);
+        userRepository.save(userEntity); //new address saved
+        return "Your address has been updated";
+    }
 
 }

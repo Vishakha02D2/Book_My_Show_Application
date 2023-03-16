@@ -5,10 +5,10 @@ import com.example.Book_my_Show_Application.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -30,4 +30,27 @@ public class UserController {
         }
 
     }
+
+    @DeleteMapping("delete") //delete wrt mobile
+    public String deleteUser(@RequestParam String mob){
+        return userService.deleteUser(mob);
+    }
+
+    @PutMapping("updateAddress") //update address wrt mobNo
+    public ResponseEntity<String> updateAddress(@RequestParam String mobNo , @RequestParam String address){
+        try {
+            String response = userService.updateAddress(mobNo, address);
+            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            String result = "User could not be updated";
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("getAll")
+    public List<String> getAll() {
+        return userService.getAll();
+    }
+
+
 }

@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -163,6 +165,28 @@ public class TicketService {
         }
         //All the seats requested were available
         return true;
+
+    }
+
+    public String cancelTicket(int id ){
+        TicketEntity ticketEntity = ticketRepository.findById(id).get();
+        String str = ticketEntity.getBookedSeats();
+        String s [] = str.split(" ");
+        Set<String> hs = new HashSet<>();
+        for(String q: s) hs.add(q); //adding all seat numbers
+        ticketEntity.setTotalAmount(ticketEntity.getTotalAmount()*-1); //multiplying the amount with -1 to show it refund amount to my company
+        ticketRepository.save(ticketEntity); //saving ticket
+        ShowEntity showEntity = ticketEntity.getShowEntity();
+        List<ShowSeatEntity> listOfSeats = showEntity.getListOfShowSeats();
+        for( ShowSeatEntity showSeatEntity : listOfSeats){
+            if( hs.contains(showSeatEntity.getSeatNo()) && showSeatEntity.getShowEntity().getId() == showEntity.getId() ){
+                showSeatEntity.setBooked(false); //seat is not booked now
+                showSeatEntity.setBookedAt(null); //created set to null
+                hs.remove(showSeatEntity.getSeatNo()); //remove the seat from set as its job is done
+            }
+        }
+        showRepository.save(showEntity); //saving the show as seat is child inside show
+        return "Done, your refund will proceed within 7 working days";
 
     }
 }
